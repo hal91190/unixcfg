@@ -1,0 +1,10 @@
+BoldAsFont=yes
+Transparency=low
+Font=Courier New
+FontHeight=12
+BoldAsColour=no
+FontSmoothing=default
+Columns=100
+Rows=40
+Term=xterm-256color
+OpaqueWhenFocused=no
