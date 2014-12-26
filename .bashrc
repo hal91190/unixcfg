@@ -39,7 +39,10 @@
 #
 # Uncomment to turn on programmable completion enhancements.
 # Any completions you add in ~/.bash_completion are sourced last.
-# [[ -f /etc/bash_completion ]] && . /etc/bash_completion
+[[ -f /etc/bash_completion ]] && . /etc/bash_completion
+
+# Git completion
+source /usr/local/bin/git-completion.bash
 
 # History Options
 #
