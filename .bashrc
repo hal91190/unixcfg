@@ -60,9 +60,25 @@ if [ -f "${HOME}/.bash_aliases" ]; then
   source "${HOME}/.bash_aliases"
 fi
 
-# Prompt
-PS1="\[$(tput setaf 5)\]\u\[$(tput setaf 4)\]@\[$(tput setaf 5)\]\h \[$(tput setaf 2)\]\W\[$(tput setaf 4)\]\\$ \[$(tput sgr0)\]"
-export PS1
-
 # ssh-pageant
 eval $(/usr/local/bin/ssh-pageant -r -a "/tmp/.ssh-pageant-$USERNAME")
+
+# git-prompt
+source /usr/local/bin/git-prompt.sh
+
+# Show if there are unstaged (*) and/or staged (+) changes
+export GIT_PS1_SHOWDIRTYSTATE=1
+
+# Show if there is anything stashed ($)
+export GIT_PS1_SHOWSTASHSTATE=1
+
+# Show if there are untracked files (%)
+export GIT_PS1_SHOWUNTRACKEDFILES=1
+
+# Show how we're tracking relative to upstream
+export GIT_PS1_SHOWUPSTREAM="auto"
+
+# Prompt
+PS1="\[$(tput setaf 5)\]\u\[$(tput setaf 4)\]@\[$(tput setaf 5)\]\h \[$(tput setaf 2)\]\W\[$(tput setaf 3)\]$(__git_ps1 " (%s)")\[$(tput setaf 4)\]\\$ \[$(tput sgr0)\]"
+#PS1='[\u@\h \W$(__git_ps1 " (%s)")]\$ '
+export PS1
