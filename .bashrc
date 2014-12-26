@@ -101,5 +101,5 @@ C_LPURPLE="\[\e[1;35m\]"
 C_LCYAN="\[\e[1;36m\]"
 C_WHITE="\[\e[1;37m\]"
 
-PROMPT_COMMAND='__git_ps1 "${C_PURPLE}\u${C_BLUE}@${C_PURPLE}\h${C_BLUE}:${C_GREEN}\w${C_NONE}" "${C_BLUE}\\$ ${C_NONE}"'
+PROMPT_COMMAND='__git_ps1 "${C_LPURPLE}\u${C_LBLUE}@${C_LPURPLE}\h${C_LBLUE}:${C_LGREEN}\w${C_NONE}" "${C_LBLUE}\\$ ${C_NONE}"'
 export PROMPT_COMMAND
