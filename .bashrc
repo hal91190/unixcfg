@@ -76,9 +76,27 @@ export GIT_PS1_SHOWSTASHSTATE=1
 export GIT_PS1_SHOWUNTRACKEDFILES=1
 
 # Show how we're tracking relative to upstream
-export GIT_PS1_SHOWUPSTREAM="auto"
+export GIT_PS1_SHOWUPSTREAM="verbose,name"
+
+# Git prompt in color
+export GIT_PS1_SHOWCOLORHINTS=1
 
 # Prompt
-PS1="\[$(tput setaf 5)\]\u\[$(tput setaf 4)\]@\[$(tput setaf 5)\]\h \[$(tput setaf 2)\]\W\[$(tput setaf 3)\]$(__git_ps1 " (%s)")\[$(tput setaf 4)\]\\$ \[$(tput sgr0)\]"
-#PS1='[\u@\h \W$(__git_ps1 " (%s)")]\$ '
-export PS1
+C_NONE="\[\e[0m\]"
+C_RED="\[\e[0;31m\]"
+C_GREEN="\[\e[0;32m\]"
+C_YELLOW="\[\e[0;33m\]"
+C_BLUE="\[\e[0;34m\]"
+C_PURPLE="\[\e[0;35m\]"
+C_CYAN="\[\e[0;36m\]"
+C_LGRAY="\[\e[0;37m\]"
+C_LRED="\[\e[1;31m\]"
+C_LGREEN="\[\e[1;32m\]"
+C_LYELLOW="\[\e[1;33m\]"
+C_LBLUE="\[\e[1;34m\]"
+C_LPURPLE="\[\e[1;35m\]"
+C_LCYAN="\[\e[1;36m\]"
+C_WHITE="\[\e[1;37m\]"
+
+PROMPT_COMMAND='__git_ps1 "${C_PURPLE}\u${C_BLUE}@${C_PURPLE}\h${C_BLUE}:${C_GREEN}\w${C_NONE}" "${C_BLUE}\\$ ${C_NONE}"'
+export PROMPT_COMMAND
