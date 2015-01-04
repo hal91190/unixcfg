@@ -18,4 +18,5 @@ function install_cfg_file {
 install_cfg_file .minttyrc
 
 install_cfg_file .bash_aliases
+install_cfg_file .bash_functions
 install_cfg_file .bashrc

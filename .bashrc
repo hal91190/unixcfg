@@ -1,10 +1,7 @@
-# The latest version as installed by the Cygwin Setup program can
-# always be found at /etc/defaults/etc/skel/.bashrc
-
-# If not running interactively, don't do anything
+#### If not running interactively, don't do anything
 [[ "$-" != *i* ]] && return
 
-# Shell Options
+#### Shell Options
 #
 # See man bash for more options...
 #
@@ -16,15 +13,23 @@
 #
 # Use case-insensitive filename globbing
 # shopt -s nocaseglob
-#
+
 # Make bash append rather than overwrite the history on disk
-# shopt -s histappend
-#
+shopt -s histappend
+
 # When changing directory small typos can be ignored by bash
 # for example, cd /vr/lgo/apaache would find /var/log/apache
-# shopt -s cdspell
+shopt -s cdspell
 
-# Completion options
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
+
+# If set, the pattern "**" used in a pathname expansion context will
+# match all files and zero or more directories and subdirectories.
+#shopt -s globstar
+
+#### Completion options
 #
 # These completion tuning parameters change the default behavior of bash_completion:
 #
@@ -41,14 +46,14 @@
 # Any completions you add in ~/.bash_completion are sourced last.
 [[ -f /etc/bash_completion ]] && . /etc/bash_completion
 
-# Git completion
-source /usr/local/bin/git-completion.bash
+# Git completion for cygwin
+[[ -f /usr/local/bin/git-completion.bash ]] && . /usr/local/bin/git-completion.bash
 
-# History Options
+#### History Options
 #
-# Don't put duplicate lines in the history.
-# export HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignoredups
-#
+# don't put duplicate lines or lines starting with space in the history.
+export HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignoreboth
+
 # Ignore some controlling instructions
 # HISTIGNORE is a colon-delimited list of patterns which should be excluded.
 # The '&' is a special pattern which suppresses duplicate entries.
@@ -58,16 +63,50 @@ source /usr/local/bin/git-completion.bash
 # Whenever displaying the prompt, write the previous line to disk
 # export PROMPT_COMMAND="history -a"
 
-# Aliases
-if [ -f "${HOME}/.bash_aliases" ]; then
-  source "${HOME}/.bash_aliases"
+# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
+HISTSIZE=1000
+HISTFILESIZE=2000
+
+#### Load all extra files
+for file in ~/.{bash_aliases,bash_functions}; do
+    [ -r "$file" ] && [ -f "$file" ] && source "$file";
+done;
+unset file;
+
+#### set variable identifying the chroot you work in (used in the prompt below)
+if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
+    debian_chroot=$(cat /etc/debian_chroot)
 fi
 
-# ssh-pageant
-eval $(/usr/local/bin/ssh-pageant -r -a "/tmp/.ssh-pageant-$USERNAME")
+#### TERM (should be set by the terminal)
+case "$TERM" in
+    xterm*) TERM=xterm-256color
+esac
 
-# git-prompt
-source /usr/local/bin/git-prompt.sh
+#### Prompt
+# set a fancy prompt (non-color, unless we know we "want" color)
+case "$TERM" in
+    xterm-color|xterm-256color) color_prompt=yes;;
+esac
+
+# uncomment for a colored prompt, if the terminal has the capability; turned
+# off by default to not distract the user: the focus in a terminal window
+# should be on the output of commands, not on the prompt
+force_color_prompt=yes
+
+if [ -n "$force_color_prompt" ]; then
+    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
+	# We have color support; assume it's compliant with Ecma-48
+	# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
+	# a case would tend to support setf rather than setaf.)
+	color_prompt=yes
+    else
+	color_prompt=
+    fi
+fi
+
+# git-prompt for cygwin
+[[ -f /usr/local/bin/git-prompt.sh ]] && . /usr/local/bin/git-prompt.sh
 
 # Show if there are unstaged (*) and/or staged (+) changes
 export GIT_PS1_SHOWDIRTYSTATE=1
@@ -84,22 +123,38 @@ export GIT_PS1_SHOWUPSTREAM="verbose,name"
 # Git prompt in color
 export GIT_PS1_SHOWCOLORHINTS=1
 
-# Prompt
-C_NONE="\[\e[0m\]"
-C_RED="\[\e[0;31m\]"
-C_GREEN="\[\e[0;32m\]"
-C_YELLOW="\[\e[0;33m\]"
-C_BLUE="\[\e[0;34m\]"
-C_PURPLE="\[\e[0;35m\]"
-C_CYAN="\[\e[0;36m\]"
-C_LGRAY="\[\e[0;37m\]"
-C_LRED="\[\e[1;31m\]"
-C_LGREEN="\[\e[1;32m\]"
-C_LYELLOW="\[\e[1;33m\]"
-C_LBLUE="\[\e[1;34m\]"
-C_LPURPLE="\[\e[1;35m\]"
-C_LCYAN="\[\e[1;36m\]"
-C_WHITE="\[\e[1;37m\]"
+if [ "$color_prompt" = yes ]; then
+    # cf. https://mkaz.com/2014/04/17/the-bash-prompt/
+    source ~/configs/extras/colors
+    UTFChar1="\342\226\266"
+#    PS1="${debian_chroot:+($debian_chroot)}\[$(tput bold)\]\[$(tput setaf 5)\]\u\[$(tput setaf 4)\]@\[$(tput setaf 5)\]\h\[$(tput setaf 4)\]:\[$(tput setaf 2)\]\w\[$(tput setaf 4)\]\\$ \[$(tput sgr0)\]"
+    PROMPT_COMMAND='__git_ps1 "\[$BPurple\]\u\[$BBlue\]@\[$BPurple\]\h\[$BBlue\]:\[$BGreen\]\w\[$Color_Off\]" "\[$BBlue\] $UTFChar1 \[$Color_Off\]"'
+    export PROMPT_COMMAND
+else
+    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+fi
+unset color_prompt force_color_prompt
 
-PROMPT_COMMAND='__git_ps1 "${C_LPURPLE}\u${C_LBLUE}@${C_LPURPLE}\h${C_LBLUE}:${C_LGREEN}\w${C_NONE}" "${C_LBLUE}\\$ ${C_NONE}"'
-export PROMPT_COMMAND
+# If this is an xterm set the title to user@host:dir
+case "$TERM" in
+xterm*|rxvt*)
+    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+    ;;
+*)
+    ;;
+esac
+
+#### PATH
+if [ -f "/opt/packer" ]; then
+    export PATH=$PATH:/opt/packer
+fi
+
+#### Several other configurations
+# make less more friendly for non-text input files, see lesspipe(1)
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+
+# ssh-pageant
+if [ -f "/usr/local/bin/ssh-pageant" ]; then
+    eval $(/usr/local/bin/ssh-pageant -r -a "/tmp/.ssh-pageant-$USERNAME")
+fi
+
