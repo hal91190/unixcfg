@@ -145,7 +145,7 @@ xterm*|rxvt*)
 esac
 
 #### PATH
-if [ -f "/opt/packer" ]; then
+if [ -f "/opt/packer/packer" ]; then
     export PATH=$PATH:/opt/packer
 fi
 
