@@ -1,0 +1,37 @@
+# cf. http://www.git-attitude.fr/2013/04/03/configuration-git/ et
+#     https://gist.github.com/tdd/470582
+# cf. https://hypedrivendev.wordpress.com/2013/09/30/git-config-les-options-indispensables/
+[user]
+	name = Stéphane Lopes
+	email = stephane.lopes@prism.uvsq.fr
+[core]
+	pager = less
+	editor = gvim --nofork -f
+	whitespace = -trailing-space
+[color]
+	ui = auto
+[alias]
+	br = branch
+	ci = commit
+	co = checkout
+	lg = log --graph --pretty=tformat:'%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%an %ar)%Creset'
+	oops = commit --amend --no-edit
+	st = status
+	up = rebase
+[log]
+	abbrevCommit = true
+[push]
+	default = simple
+[diff]
+	mnemonicPrefix = true
+	renames = true
+	wordRegex = .
+	tool = meld
+[merge]
+	conflictStyle = diff3
+	tool = meld
+[mergetool]
+	keepBackup = false
+	keepTemporaries = false
+	prompt = false
+
