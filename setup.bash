@@ -15,7 +15,7 @@ function install_cfg_file {
 		DEST=~/$1
 	fi
 	if [ -h $DEST -o ! -e $DEST ]; then
-		[ -e $DEST ] && unlink $DEST
+		[ -h $DEST ] && unlink $DEST
 		echo "Création du lien symbolique $DEST -> $CFG_DIR/$1."
 		ln -s $CFG_DIR/$1 $DEST
 	else
@@ -24,12 +24,12 @@ function install_cfg_file {
 }
 
 # Le terminal sur Mac OS X
-install_cfg_file .minttyrc
+install_cfg_file _minttyrc
 
 # Bash
-install_cfg_file .bash_aliases
-install_cfg_file .bash_functions
-install_cfg_file .bashrc
+install_cfg_file _bash_aliases
+install_cfg_file _bash_functions
+install_cfg_file _bashrc
 
 # Git
 install_cfg_file _gitconfig
