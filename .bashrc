@@ -128,7 +128,7 @@ if [ "$color_prompt" = yes ]; then
     source ~/configs/extras/colors
     UTFChar1="\342\226\266"
 #    PS1="${debian_chroot:+($debian_chroot)}\[$(tput bold)\]\[$(tput setaf 5)\]\u\[$(tput setaf 4)\]@\[$(tput setaf 5)\]\h\[$(tput setaf 4)\]:\[$(tput setaf 2)\]\w\[$(tput setaf 4)\]\\$ \[$(tput sgr0)\]"
-    PROMPT_COMMAND='__git_ps1 "\[$BPurple\]\u\[$BBlue\]@\[$BPurple\]\h\[$BBlue\]:\[$BGreen\]\w\[$Color_Off\]" "\[$BBlue\] $UTFChar1 \[$Color_Off\]"'
+    PROMPT_COMMAND='__git_ps1 "\[$Yellow\]\u\[$Cyan\]@\[$Yellow\]\h\[$Cyan\]:\[$Green\]\w\[$Color_Off\]" "\[$Cyan\] $UTFChar1 \[$Color_Off\]"'
     export PROMPT_COMMAND
 else
     PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
