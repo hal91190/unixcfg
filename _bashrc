@@ -158,3 +158,9 @@ if [ -f "/usr/local/bin/ssh-pageant" ]; then
     eval $(/usr/local/bin/ssh-pageant -r -a "/tmp/.ssh-pageant-$USERNAME")
 fi
 
+# hadoop
+if [ -f "/usr/local/hadoop/etc/hadoop/hadoop-env.sh" ]; then
+    source /usr/local/hadoop/etc/hadoop/hadoop-env.sh
+    export PATH=$PATH:$HADOOP_PREFIX/bin
+fi
+
