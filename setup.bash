@@ -33,6 +33,7 @@ install_cfg_file _bashrc
 
 # Git
 install_cfg_file _gitconfig
+ln -s $CFG_DIR/_vim ~/.vim
 
 # ViM
 install_cfg_file _vimrc
