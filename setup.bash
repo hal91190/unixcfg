@@ -34,3 +34,6 @@ install_cfg_file _bashrc
 # Git
 install_cfg_file _gitconfig
 
+# ViM
+install_cfg_file _vimrc
+
