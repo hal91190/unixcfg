@@ -15,6 +15,9 @@ Plugin 'gmarik/Vundle.vim'   " requis par Vundle
 " thème de couleurs solarized
 Plugin 'altercation/vim-colors-solarized'
 
+" ligne de status améliorée
+Plugin 'bling/vim-airline'
+
 " tous les plugins Vundle doivent être ajoutés avant cette ligne
 call vundle#end()            " requis par Vundle
 
@@ -91,6 +94,13 @@ set nowrap
 if exists("&colorcolumn")
   set colorcolumn=+1
 endif
+" }}}
+
+" {{{ ligne de status et airline
+" lighne de status en bas
+set laststatus=2
+" ligne d'informations en haut de l'écran (liste des buffers)
+"let g:airline#extensions#tabline#enabled = 1
 " }}}
 
 " {{{ apparence
