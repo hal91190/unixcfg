@@ -1,6 +1,15 @@
+" Références
+" http://items.sjbach.com/319/configuring-vim-right
+" http://nvie.com/posts/how-i-boosted-my-vim/
+" http://usevim.com/tags.html
+" https://gist.github.com/joegoggins/8482408
+
 " {{{ Vundle
 " pas de compatibilité particulière avec le vi original
 set nocompatible             " requis par Vundle
+
+" définit le caractète leader
+let mapleader = ","
 
 " désactive la détection du type de fichier au chargement
 filetype off                 " requis par Vundle
@@ -12,11 +21,18 @@ call vundle#begin()          " requis par Vundle
 " Vundle gère Vundle
 Plugin 'gmarik/Vundle.vim'   " requis par Vundle
 
+" après l'ajout d'un plugin
+" :BundleInstall dans vim, ou
+" vim +BundleInstall +qall en ligne de commande
+
 " thème de couleurs solarized
 Plugin 'altercation/vim-colors-solarized'
 
 " ligne de status améliorée
 Plugin 'bling/vim-airline'
+
+" explorateur de fichiers
+Plugin 'scrooloose/nerdtree.git'
 
 " tous les plugins Vundle doivent être ajoutés avant cette ligne
 call vundle#end()            " requis par Vundle
@@ -69,9 +85,6 @@ endif
 " indentation automatique des nouvelles lignes
 set autoindent
 
-" montre les correspondances de parenthèses
-set showmatch
-
 " espaces et tabulations
 " use shiftwidth and tabstop smartly
 set smarttab
@@ -96,11 +109,70 @@ if exists("&colorcolumn")
 endif
 " }}}
 
+" {{{ comportement
+" autorise un buffer modifié à passer en arrière plan
+set hidden
+
+" augmente la taille de l'historique
+set history=1000
+
+" améliore le matching avec %
+runtime macros/matchit.vim
+
+" améliore la complétion
+set wildmenu
+set wildmode=list:longest
+
+" configure la recherche
+set ignorecase
+set smartcase
+
+" fixe le titre du terminal
+set title
+
+" défile à 3 lignes du bord
+set scrolloff=3
+
+" backspace en mode insertion
+set backspace=indent,eol,start
+
+" mise en évidence des termes de recherche
+set hlsearch
+set incsearch
+
+" tabulations et espace de fin visible à la demande
+set listchars=tab:>-,trail:·,eol:$
+nmap <silent> <leader>s :set nolist!<CR>
+
+" signal visuel plutôt que sonore
+set visualbell
+
+" recharge automatiquement un fichier modifié
+set autoread
+" }}}
+
 " {{{ ligne de status et airline
 " lighne de status en bas
 set laststatus=2
 " ligne d'informations en haut de l'écran (liste des buffers)
 "let g:airline#extensions#tabline#enabled = 1
+" }}}
+
+" {{{ raccourcis
+" désactive la mise en évidence de la recherche
+nmap <silent> <Leader>n :nohls<CR>
+
+" ouvre/charge le .vimrc
+nmap <silent> ,ev :e $MYVIMRC<CR>
+nmap <silent> ,sv :so $MYVIMRC<CR>
+
+" }}}
+
+" {{{ NERD Tree
+" ouverture/fermeture
+nmap <F7> :NERDTreeToggle<CR>
+nmap <S-F7> :NERDTreeClose<CR>
+
 " }}}
 
 " {{{ apparence
@@ -123,6 +195,9 @@ if has('gui_running')
     set guifont=Courier_New:h10
   endif
 endif
+
+" montre les correspondances de parenthèses
+set showmatch
 
 " active la coloration syntaxique
 syntax on
