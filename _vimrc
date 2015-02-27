@@ -162,6 +162,9 @@ set laststatus=2
 " désactive la mise en évidence de la recherche
 nmap <silent> <Leader>n :nohls<CR>
 
+" supprime les espaces en fin de ligne
+nmap <silent> <Leader>rmtrail :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar>:nohl<CR>
+
 " ouvre/charge le .vimrc
 nmap <silent> ,ev :e $MYVIMRC<CR>
 nmap <silent> ,sv :so $MYVIMRC<CR>
