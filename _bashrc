@@ -159,10 +159,13 @@ esac
 # }}}
 
 # {{{ PATH
-if [ -f "/opt/packer/packer" ]; then
+if [ -d "/opt/packer/packer" ]; then
     export PATH=$PATH:/opt/packer:~/bin
 fi
 
+if [ -d "$HOME/bin" ]; then
+    export PATH=$PATH:~/bin
+fi
 # }}}
 
 # {{{ Several other configurations
