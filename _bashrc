@@ -1,7 +1,7 @@
-#### If not running interactively, don't do anything
+# If not running interactively, don't do anything
 [[ "$-" != *i* ]] && return
 
-#### Shell Options
+# {{{ Shell Options
 #
 # See man bash for more options...
 #
@@ -29,7 +29,9 @@ shopt -s checkwinsize
 # match all files and zero or more directories and subdirectories.
 #shopt -s globstar
 
-#### Completion options
+# }}}
+
+# {{{ Completion options
 #
 # These completion tuning parameters change the default behavior of bash_completion:
 #
@@ -49,7 +51,9 @@ shopt -s checkwinsize
 # Git completion for cygwin
 [[ -f /usr/local/bin/git-completion.bash ]] && . /usr/local/bin/git-completion.bash
 
-#### History Options
+# }}}
+
+# {{{ History Options
 #
 # don't put duplicate lines or lines starting with space in the history.
 export HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignoreboth
@@ -67,23 +71,31 @@ export HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignoreboth
 HISTSIZE=1000
 HISTFILESIZE=2000
 
-#### Load all extra files
+# }}}
+
+# {{{ Load all extra files
 for file in ~/.{bash_aliases,bash_functions}; do
     [ -r "$file" ] && [ -f "$file" ] && source "$file";
 done;
 unset file;
 
-#### set variable identifying the chroot you work in (used in the prompt below)
+# }}}
+
+# {{{ set variable identifying the chroot you work in (used in the prompt below)
 if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
     debian_chroot=$(cat /etc/debian_chroot)
 fi
 
-#### TERM (should be set by the terminal)
+# }}}
+
+# {{{ TERM (should be set by the terminal)
 case "$TERM" in
     xterm*) TERM=xterm-256color
 esac
 
-#### Prompt
+# }}}
+
+# {{{ Prompt
 # set a fancy prompt (non-color, unless we know we "want" color)
 case "$TERM" in
     xterm-color|xterm-256color) color_prompt=yes;;
@@ -144,12 +156,16 @@ xterm*|rxvt*)
     ;;
 esac
 
-#### PATH
+# }}}
+
+# {{{ PATH
 if [ -f "/opt/packer/packer" ]; then
     export PATH=$PATH:/opt/packer
 fi
 
-#### Several other configurations
+# }}}
+
+# {{{ Several other configurations
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
@@ -163,4 +179,6 @@ if [ -f "/usr/local/hadoop/etc/hadoop/hadoop-env.sh" ]; then
     source /usr/local/hadoop/etc/hadoop/hadoop-env.sh
     export PATH=$PATH:$HADOOP_PREFIX/bin
 fi
+
+# }}}
 
