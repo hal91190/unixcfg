@@ -160,7 +160,7 @@ esac
 
 # {{{ PATH
 if [ -f "/opt/packer/packer" ]; then
-    export PATH=$PATH:/opt/packer
+    export PATH=$PATH:/opt/packer:~/bin
 fi
 
 # }}}
