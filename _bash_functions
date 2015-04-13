@@ -7,6 +7,8 @@
 # Sous-titres : désactivés
 function conv2kidigo {
 # ffmpeg -i <input> -s <taille wxh> -sn (désactive les sous-titres) -b:v <video bitrate> -b:a <audio bitrate> -c:v <codec video> -c:a <codec audio> <output>
-    ffmpeg -i "$1" -c:v libxvid -s 480x272 -b:v 512k -sn -c:a mp3 -b:a 96k "${1%%.***}.avi"
+    filename=${1##*/}
+    filebasename=${filename%.*}
+    ffmpeg -i "$1" -c:v libxvid -s 480x272 -b:v 512k -sn -c:a mp3 -b:a 96k "$filebasename.kidigo.avi"
 }
 
