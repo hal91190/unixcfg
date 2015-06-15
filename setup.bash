@@ -42,10 +42,13 @@ install_cfg_file _bashrc
 
 # Git
 install_cfg_file _gitconfig
-create_link _vim ~/.vim
 
 # ViM
+mkdir -p $CFG_DIR/_vim/bundle
+create_link _vim ~/.vim
 install_cfg_file _vimrc
+git clone https://github.com/gmarik/Vundle.vim.git $CFG_DIR/_vim/bundle/Vundle.vim
+vim +PluginInstall +qall
 
 # Applications par défaut sous Gnome
 create_link defaults.list ~/.local/share/applications/defaults.list
