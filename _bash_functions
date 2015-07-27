@@ -12,3 +12,18 @@ function conv2kidigo {
     ffmpeg -i "$1" -c:v libxvid -s 480x272 -b:v 512k -sn -c:a mp3 -b:a 96k "$filebasename.kidigo.avi"
 }
 
+# Convertit une vidéo au format mp4 800x600
+# Vidéo : MP4 en format H264, résolution : 800x600
+# Son : Audio Codec : AAC, Audio Bitrate : 128
+# Sous-titres : désactivés
+function conv2mp4 {
+# ffmpeg -i <input> -s <taille wxh> -sn (désactive les sous-titres) -b:v <video bitrate> -b:a <audio bitrate> -c:v <codec video> -c:a <codec audio> <output>
+    filename=${1##*/}
+    filebasename=${filename%.*}
+    ffmpeg -i "$1" \
+        -s 800x600 -c:v libx264 -crf 28 \
+        -c:a libfdk_aac -b:a 128k \
+        -sn \
+        "$filebasename.mp4"
+}
+
