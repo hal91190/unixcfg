@@ -158,9 +158,19 @@ esac
 
 # }}}
 
-# {{{ PATH
-if [ -d "/opt/packer/packer" ]; then
-    export PATH=$PATH:/opt/packer:~/bin
+# {{{ ENV
+if [ -d "/opt/groovy/bin" ]; then
+    export GROOVY_HOME=/opt/groovy
+    export PATH=$PATH:$GROOVY_HOME/bin
+fi
+
+if [ -d "/opt/gradle/bin" ]; then
+    export GRADLE_HOME=/opt/gradle
+    export PATH=$PATH:$GRADLE_HOME/bin
+fi
+
+if [ -f "/opt/packer/packer" ]; then
+    export PATH=$PATH:/opt/packer
 fi
 
 if [ -d "$HOME/bin" ]; then
