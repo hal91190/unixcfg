@@ -3,7 +3,7 @@
 # cf. https://hypedrivendev.wordpress.com/2013/09/30/git-config-les-options-indispensables/
 [user]
 	name = Stéphane Lopes
-	email = stephane.lopes@prism.uvsq.fr
+	email = stephane.lopes@uvsq.fr
 [core]
 	pager = less
 	editor = gvim --nofork -f
