@@ -159,6 +159,10 @@ esac
 # }}}
 
 # {{{ ENV
+if [ -d "/usr/lib/jvm/java-8-oracle" ]; then
+    export JAVA_HOME=/usr/lib/jvm/java-8-oracle
+fi
+
 if [ -d "/opt/groovy/bin" ]; then
     export GROOVY_HOME=/opt/groovy
     export PATH=$PATH:$GROOVY_HOME/bin
@@ -169,6 +173,17 @@ if [ -d "/opt/gradle/bin" ]; then
     export PATH=$PATH:$GRADLE_HOME/bin
 fi
 
+# hadoop
+if [ -f "/usr/local/hadoop/etc/hadoop/hadoop-env.sh" ]; then
+    source /usr/local/hadoop/etc/hadoop/hadoop-env.sh
+    export PATH=$PATH:$HADOOP_PREFIX/bin
+fi
+
+# spark
+if [ -d "/opt/spark/bin" ]; then
+    export PATH=$PATH:/opt/spark/bin
+fi
+
 if [ -f "/opt/packer/packer" ]; then
     export PATH=$PATH:/opt/packer
 fi
@@ -176,6 +191,7 @@ fi
 if [ -d "$HOME/bin" ]; then
     export PATH=$PATH:~/bin
 fi
+
 # }}}
 
 # {{{ Several other configurations
@@ -185,12 +201,6 @@ fi
 # ssh-pageant
 if [ -f "/usr/local/bin/ssh-pageant" ]; then
     eval $(/usr/local/bin/ssh-pageant -r -a "/tmp/.ssh-pageant-$USERNAME")
-fi
-
-# hadoop
-if [ -f "/usr/local/hadoop/etc/hadoop/hadoop-env.sh" ]; then
-    source /usr/local/hadoop/etc/hadoop/hadoop-env.sh
-    export PATH=$PATH:$HADOOP_PREFIX/bin
 fi
 
 # }}}
