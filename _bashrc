@@ -179,6 +179,11 @@ if [ -f "/usr/local/hadoop/etc/hadoop/hadoop-env.sh" ]; then
     export PATH=$PATH:$HADOOP_PREFIX/bin
 fi
 
+if [ -d "/opt/hadoop/bin" ]; then
+    export HADOOP_PREFIX=/opt/hadoop
+    export PATH=$PATH:$HADOOP_PREFIX/bin
+fi
+
 # spark
 if [ -d "/opt/spark/bin" ]; then
     export PATH=$PATH:/opt/spark/bin
