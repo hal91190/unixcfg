@@ -40,6 +40,9 @@ install_cfg_file _bash_aliases
 install_cfg_file _bash_functions
 install_cfg_file _bashrc
 
+# Tmux
+install_cfg_file _tmux.conf
+
 # Git
 install_cfg_file _gitconfig
 
