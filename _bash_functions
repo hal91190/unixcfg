@@ -27,3 +27,106 @@ function conv2mp4 {
         "$filebasename.mp4"
 }
 
+# Log a message on stderr
+# #@ the message to log
+function hal_log {
+    echo "# "$(basename "$0")" $(date +%F_%X) : $@">&2
+}
+
+# Backup function using rsync
+# $1 source (/ at the end to backup the content)
+# $2 destination
+# $3... files to exclude
+#
+# see https://wiki.debian.org/fr/RsyncSnapshots
+# see http://www.sanitarium.net/golug/rsync_backups_2010.html
+# see http://uname.pingveno.net/blog/index.php/post/2015/02/21/Configurer-un-backup-incr%C3%A9mental-avec-duplicity,-rsync,-et-backupninja-sous-Debian
+# see http://www.tecmint.com/linux-system-backup-tools/
+# see http://www.cyberciti.biz/open-source/awesome-backup-software-for-linux-unix-osx-windows-systems/
+#
+# Some usefull rsync options
+#  -a, --archive (equals -rlptgoD (no -H,-A,-X))
+#  -A, --acls                  preserve ACLs (implies -p)
+#  -C, --cvs-exclude
+#      --devices               preserve device files (super-user only)
+#      --specials              preserve special files
+#  -D                          same as --devices --specials
+#  -g, --group                 preserve group
+#  -h, --human-readable        output numbers in a human-readable format
+#  -H, --hard-links            preserve hard links
+#  -l, --links                 copy symlinks as symlinks
+#  -n, --dry-run
+#  -o, --owner                 preserve owner (super-user only)
+#  -p, --perms                 preserve permissions
+#  -q, --quiet
+#  -r, --recursive
+#  -t, --times                 preserve modification times
+#  -v, --verbose
+#  -X, --xattrs                preserve extended attributes
+#      --delete-before
+#      --delete-after
+#      --delete-excluded
+#      --link-dest=DIR         hardlink to files in DIR when unchanged
+#      --exclude-from=FILE     read exclude patterns from FILE
+#      --stats                 give some file-transfer stats
+#
+function hal_backup {
+    local src=$1
+    shift
+    local dest=$1
+    shift
+
+    hal_log "Sauvegarde : $src -> $dest"
+
+    if [ ! -d "$dest" ]; then
+        # destination dir does not exists => create it
+        mkdir -p "$dest"
+    fi
+
+    local exclude_file=$(tempfile)
+    for line in "$@"; do
+        echo "$line" >> $exclude_file
+    done
+
+    local previous_backup_dir="$dest/current"
+    local backup_dir="$dest/$(date +%F_%X)"
+    local current_rsync_options=(--stats -rlpth --delete)
+    current_rsync_options+=(--delete-excluded --exclude-from=$exclude_file)
+    if [[ -L $previous_backup_dir && -d $previous_backup_dir ]]; then
+        # a backup already exists => link
+        current_rsync_options+=(--link-dest="$previous_backup_dir")
+    fi
+
+    rsync "${current_rsync_options[@]}" \
+          "$src" \
+          "$backup_dir"
+    local rsync_exit_code=$?
+
+    rm -f $exclude_file
+
+    if [ $rsync_exit_code == 0 ]; then
+        rm -f "$previous_backup_dir" 2>/dev/null
+        ln -s "$backup_dir" "$previous_backup_dir"
+    else
+        hal_log "Rsync error $rsync_exit_code during backup in $backup_dir"
+    fi
+
+    return $rsync_exit_code
+}
+
+# Test if a directory is mounted
+function is_mounted {
+    mount | grep "on $1" > /dev/null
+    return $?
+}
+
+# Backup only if the first arg is mounted
+function verify_mountpoint_and_backup {
+    if is_mounted "$1"; then
+        shift
+        hal_backup "$@"
+    else
+        hal_log "Mount point $1 unavailable => backup aborted."
+    fi
+}
+
