@@ -189,10 +189,6 @@ if [ -d "/opt/spark/bin" ]; then
     export PATH=$PATH:/opt/spark/bin
 fi
 
-if [ -f "/opt/packer/packer" ]; then
-    export PATH=$PATH:/opt/packer
-fi
-
 if [ -d "$HOME/bin" ]; then
     export PATH=$PATH:~/bin
 fi
