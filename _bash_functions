@@ -76,7 +76,7 @@ function hal_backup {
     local dest=$1
     shift
 
-    hal_log "Sauvegarde : $src -> $dest"
+    hal_log "Backup : $src -> $dest : Started"
 
     if [ ! -d "$dest" ]; then
         # destination dir does not exists => create it
@@ -105,11 +105,13 @@ function hal_backup {
     rm -f $exclude_file
 
     if [ $rsync_exit_code == 0 ]; then
-        rm -f "$previous_backup_dir" 2>/dev/null
-        ln -s "$backup_dir" "$previous_backup_dir"
+        hal_log "Backup : $src -> $dest : OK"
     else
-        hal_log "Rsync error $rsync_exit_code during backup in $backup_dir"
+        hal_log "Backup : $src -> $dest : Rsync error $rsync_exit_code"
     fi
+
+    rm -f "$previous_backup_dir" 2>/dev/null
+    ln -s "$backup_dir" "$previous_backup_dir"
 
     return $rsync_exit_code
 }
