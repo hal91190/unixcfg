@@ -132,3 +132,45 @@ function verify_mountpoint_and_backup {
     fi
 }
 
+# Sync two dirs
+# $1 source (/ at the end to backup the content)
+# $2 destination
+#
+function hal_sync {
+    local src=$1
+    shift
+    local dest=$1
+    shift
+
+    hal_log "Syncing : $src -> $dest : Started"
+
+    if [ ! -d "$dest" ]; then
+        # destination dir does not exists => create it
+        mkdir -p "$dest"
+    fi
+
+    local current_rsync_options=(-ah --stats --delete)
+
+    rsync "${current_rsync_options[@]}" \
+          "$src" \
+          "$dest"
+    local rsync_exit_code=$?
+
+    if [ $rsync_exit_code == 0 ]; then
+        hal_log "Syncing : $src -> $dest : OK"
+    else
+        hal_log "Syncing : $src -> $dest : Rsync error $rsync_exit_code"
+    fi
+
+    return $rsync_exit_code
+}
+
+# Sync only if the first arg is mounted
+function verify_mountpoint_and_sync {
+    if is_mounted "$1"; then
+        shift
+        hal_sync "$@"
+    else
+        hal_log "Mount point $1 unavailable => sync aborted."
+    fi
+}
