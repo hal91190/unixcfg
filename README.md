@@ -20,6 +20,7 @@ Type `vim +PluginInstall +qall` in a terminal to install or update plugins.
 On Linux, the [Source Code Pro](https://github.com/adobe-fonts/source-code-pro) font is used for graphical display.
 
 ## Configuration for TMux
+The configuratio is in [_tmux.conf](_tmux.conf).
 
 ## Other configurations
 ### Cygwin terminal
