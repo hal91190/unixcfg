@@ -193,6 +193,9 @@ if [ -d "$HOME/bin" ]; then
     export PATH=$PATH:~/bin
 fi
 
+# todo-txt
+export TODOTXT_DEFAULT_ACTION=ls
+
 # }}}
 
 # {{{ Several other configurations
