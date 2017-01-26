@@ -193,8 +193,8 @@ if [ -d "$HOME/bin" ]; then
     export PATH=$PATH:~/bin
 fi
 
-export EDITOR=vim
-export VISUAL=vim
+export EDITOR="/usr/bin/vim"
+export VISUAL=$EDITOR
 
 # todo-txt
 export TODOTXT_DEFAULT_ACTION=ls
