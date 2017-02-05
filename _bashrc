@@ -159,6 +159,11 @@ esac
 # }}}
 
 # {{{ ENV
+# General settings
+export EDITOR="/usr/bin/vim"
+export VISUAL=$EDITOR
+
+# Programing languages
 if [ -d "/usr/lib/jvm/java-8-oracle" ]; then
     export JAVA_HOME=/usr/lib/jvm/java-8-oracle
 fi
@@ -172,6 +177,8 @@ if [ -d "/opt/gradle/bin" ]; then
     export GRADLE_HOME=/opt/gradle
     export PATH=$PATH:$GRADLE_HOME/bin
 fi
+
+export GOPATH=$HOME/Documents/Dev/golang
 
 # hadoop
 if [ -f "/usr/local/hadoop/etc/hadoop/hadoop-env.sh" ]; then
@@ -192,9 +199,6 @@ fi
 if [ -d "$HOME/bin" ]; then
     export PATH=$PATH:~/bin
 fi
-
-export EDITOR="/usr/bin/vim"
-export VISUAL=$EDITOR
 
 # todo-txt
 export TODOTXT_DEFAULT_ACTION=ls
