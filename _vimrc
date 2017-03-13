@@ -29,7 +29,8 @@ Plugin 'gmarik/Vundle.vim'   " requis par Vundle
 Plugin 'altercation/vim-colors-solarized'
 
 " ligne de status améliorée
-Plugin 'bling/vim-airline'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
 
 " explorateur de fichiers
 Plugin 'scrooloose/nerdtree.git'
