@@ -79,6 +79,9 @@ for file in ~/.{bash_aliases,bash_functions}; do
 done;
 unset file;
 
+if [ -d ~/Documents/Dev/git-subrepo/ ]; then
+    source ~/Documents/Dev/git-subrepo/.rc
+fi
 # }}}
 
 # {{{ set variable identifying the chroot you work in (used in the prompt below)
