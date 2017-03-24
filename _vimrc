@@ -35,9 +35,7 @@ Plugin 'bling/vim-airline'
 Plugin 'scrooloose/nerdtree.git'
 
 " Snippets
-Plugin 'MarcWeber/vim-addon-mw-utils'
-Plugin 'tomtom/tlib_vim'
-Plugin 'garbas/vim-snipmate'
+Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 
 " tous les plugins Vundle doivent être ajoutés avant cette ligne
@@ -182,6 +180,16 @@ nmap <silent> ,sv :so $MYVIMRC<CR>
 nmap <F7> :NERDTreeToggle<CR>
 nmap <S-F7> :NERDTreeClose<CR>
 
+" }}}
+
+" {{{ UltiSnips
+" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+
+" If you want :UltiSnipsEdit to split your window.
+let g:UltiSnipsEditSplit="vertical"
 " }}}
 
 " {{{ apparence
