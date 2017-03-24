@@ -34,6 +34,12 @@ Plugin 'bling/vim-airline'
 " explorateur de fichiers
 Plugin 'scrooloose/nerdtree.git'
 
+" Snippets
+Plugin 'MarcWeber/vim-addon-mw-utils'
+Plugin 'tomtom/tlib_vim'
+Plugin 'garbas/vim-snipmate'
+Plugin 'honza/vim-snippets'
+
 " tous les plugins Vundle doivent être ajoutés avant cette ligne
 call vundle#end()            " requis par Vundle
 
