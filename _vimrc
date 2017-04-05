@@ -39,6 +39,9 @@ Plugin 'scrooloose/nerdtree.git'
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 
+" Magellan color scheme
+Plugin 'tokers/Magellan'
+
 " tous les plugins Vundle doivent être ajoutés avant cette ligne
 call vundle#end()            " requis par Vundle
 
@@ -196,11 +199,6 @@ let g:UltiSnipsEditSplit="vertical"
 " }}}
 
 " {{{ apparence
-" thème de couleur
-set background=dark
-silent! colorscheme solarized
-
-" GUI
 if has('gui_running')
   set lines=60 columns=102 linespace=0
   "set guioptions-=m          " menu
@@ -214,6 +212,11 @@ if has('gui_running')
   elseif WINDOWS()
     set guifont=Courier_New:h10
   endif
+  set antialias
+  set background=dark
+  colorscheme solarized
+else
+  colorscheme magellan
 endif
 
 " montre les correspondances de parenthèses
