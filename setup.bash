@@ -3,56 +3,74 @@
 # Debug
 # set -xv
 
-CFG_DIR=~/configs
+CFG_DIR="$HOME/configs"
+OS="$(uname -s | { read -r -a array ; echo "${array[0]}" ; })"
 
-# crée un lien symbolique pour un fichier de config
-# #1 source du lien
-# #2 lien à créer
+# Create a symbolic link for a config file
+# #1 source for the link
+# #2 link name
 function create_link {
-	SRC="$CFG_DIR/$1"
-	DEST="$2"
-	if [ -h "$DEST" ] || [ ! -e "$DEST" ]; then
-		[ -h "$DEST" ] && unlink "$DEST"
-		echo "Création du lien symbolique $DEST -> $SRC."
-		ln -s "$SRC" "$DEST"
-	else
-		echo "$DEST n'est pas un lien symbolique."
-	fi
+    SRC="$CFG_DIR/$1"
+    DEST="$2"
+    if [[ -h $DEST || ! -e $DEST ]]; then
+        [[ -h $DEST ]] && {
+        echo "Removing old symbolic link $DEST"
+        unlink "$DEST"
+    }
+    echo "Creating symbolic link $DEST -> $SRC"
+    ln -s "$SRC" "$DEST"
+else
+    echo "$DEST already exists and is not a symbolic link => Aborting link creation"
+fi
 }
 
-# crée un lien symbolique pour un fichier de config
-# #1 fichier à installer
-#    si le nom du fichier débute par un _, il sera remplacé par un .
-function install_cfg_file {
-	if [ "${1:0:1}" = "_" ]; then
-		DEST="$HOME/${1/_/.}"
-	else
-		DEST="$HOME/$1"
-	fi
+# Create a symbolic link in the user home dir for a config file or directory
+# #1 element to install
+#    if the name begins with a "_", it will be replaced by a "."
+function install_cfg {
+    if [[ $1 = _* ]]; then
+        DEST="$HOME/${1/_/.}"
+    else
+        DEST="$HOME/$1"
+    fi
     create_link "$1" "$DEST"
 }
 
-# Le terminal sur Mac OS X
-install_cfg_file _minttyrc
+if [[ $OS = "Linux" || $OS = "Darwin" ]]; then
+    echo "Installing (or updating) configuration for $OS platform"
+else
+    echo "This script does not support this platform ($OS)"
+fi
+
+if [[ $OS = "Darwin" ]]; then
+    echo "Applying specific configuration to $OS"
+    echo "Configuring terminal on Mac OS X"
+    install_cfg _minttyrc
+fi
 
 # Bash
-install_cfg_file _bash_aliases
-install_cfg_file _bash_functions
-install_cfg_file _bashrc
+install_cfg _bash_aliases
+install_cfg _bash_functions
+install_cfg _bashrc
 
 # Tmux
-install_cfg_file _tmux.conf
+install_cfg _tmux.conf
 
 # Git
-install_cfg_file _gitconfig
+install_cfg _gitconfig
+
+# Default applications for Gnome
+create_link defaults.list "$HOME/.local/share/applications/defaults.list"
 
 # ViM
-mkdir -p $CFG_DIR/_vim/bundle
-create_link _vim ~/.vim
-install_cfg_file _vimrc
-git clone https://github.com/gmarik/Vundle.vim.git $CFG_DIR/_vim/bundle/Vundle.vim
+install_cfg _vimrc
+install_cfg _vim
+if [[ ! -d "$CFG_DIR/_vim/bundle/Vundle.vim" ]]; then
+    echo "Cloning Vundle"
+    git clone https://github.com/gmarik/Vundle.vim.git "$CFG_DIR/_vim/bundle/Vundle.vim"
+else
+    echo "Pulling Vundle"
+    git -C "$CFG_DIR/_vim/bundle/Vundle.vim" pull
+fi
 vim +PluginInstall +qall
-
-# Applications par défaut sous Gnome
-create_link defaults.list ~/.local/share/applications/defaults.list
 
