@@ -9,12 +9,12 @@ CFG_DIR=~/configs
 # #1 source du lien
 # #2 lien à créer
 function create_link {
-	SRC=$CFG_DIR/$1
-	DEST=$2
-	if [ -h $DEST -o ! -e $DEST ]; then
-		[ -h $DEST ] && unlink $DEST
+	SRC="$CFG_DIR/$1"
+	DEST="$2"
+	if [ -h "$DEST" ] || [ ! -e "$DEST" ]; then
+		[ -h "$DEST" ] && unlink "$DEST"
 		echo "Création du lien symbolique $DEST -> $SRC."
-		ln -s $SRC $DEST
+		ln -s "$SRC" "$DEST"
 	else
 		echo "$DEST n'est pas un lien symbolique."
 	fi
@@ -24,12 +24,12 @@ function create_link {
 # #1 fichier à installer
 #    si le nom du fichier débute par un _, il sera remplacé par un .
 function install_cfg_file {
-	if [ ${1:0:1} = "_" ]; then
-		DEST=~/${1/_/.}
+	if [ "${1:0:1}" = "_" ]; then
+		DEST="$HOME/${1/_/.}"
 	else
-		DEST=~/$1
+		DEST="$HOME/$1"
 	fi
-    create_link $1 $DEST
+    create_link "$1" "$DEST"
 }
 
 # Le terminal sur Mac OS X
