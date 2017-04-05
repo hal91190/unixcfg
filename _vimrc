@@ -102,16 +102,18 @@ set tabstop=4
 set softtabstop=4
 set shiftwidth=4
 
-" largeur du texte
-set textwidth=100
+" pas d'insertion de saut de ligne
+set textwidth=0
+set wrapmargin=0
 
-" pas de retour à ligne automatique
-set nowrap
+" retour à ligne visuel automatique
+set wrap
+set linebreak
+let &showbreak='+++ ' 
+set nolist
 
-" mise en évidence de la 1ère colonne après la largeur limite
-if exists("&colorcolumn")
-  set colorcolumn=+1
-endif
+" mise en évidence de la largeur limite
+set colorcolumn=100
 " }}}
 
 " {{{ comportement
