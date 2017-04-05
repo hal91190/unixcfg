@@ -74,3 +74,20 @@ else
 fi
 vim +PluginInstall +qall
 
+# notes.sh
+echo "Installing note taking script"
+NOTES_SH_URL="https://gist.github.com/hal91190/20d361c317b71232d8edb7496f2bbe14/raw"
+if [[ ! -d "$HOME/bin" ]]; then
+    mkdir -p "$HOME/bin"
+fi
+echo "Retrieving and installing notes.sh in $HOME/bin"
+wget -q -P "$HOME/bin" "$NOTES_SH_URL/notes.sh"
+chmod +x "$HOME/bin/notes.sh"
+echo "Retrieving and installing .notesrc in $HOME"
+wget -q -P "$HOME" "$NOTES_SH_URL/.notesrc"
+echo "Retrieving and installing notes-completion in /etc/bash_completion.d (with sudo)"
+sudo wget -q -P "/etc/bash_completion.d" "$NOTES_SH_URL/notes-completion"
+
+echo "Finish installation by running :"
+echo "source \"$HOME/.bashrc\""
+
