@@ -58,6 +58,13 @@ install_cfg _tmux.conf
 
 # Git
 install_cfg _gitconfig
+if [[ ! -d "$HOME/Documents/Dev/git-subrepo/" ]]; then
+    echo "Cloning git-subrepo"
+    git clone https://github.com/ingydotnet/git-subrepo.git "$HOME/Documents/Dev/git-subrepo/"
+else
+    echo "Pulling git-subrepo"
+    git -C "$HOME/Documents/Dev/git-subrepo/" pull
+fi
 
 # Default applications for Gnome
 create_link defaults.list "$HOME/.local/share/applications/defaults.list"
