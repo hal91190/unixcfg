@@ -75,25 +75,22 @@ HISTFILESIZE=2000
 
 # {{{ Load all extra files
 for file in ~/.{bash_aliases,bash_functions}; do
-    [ -r "$file" ] && [ -f "$file" ] && source "$file";
+    [[ -r $file && -f $file ]] && . "$file";
 done;
 unset file;
 
-if [ -d ~/Documents/Dev/git-subrepo/ ]; then
-    source ~/Documents/Dev/git-subrepo/.rc
-fi
+[[ -f ~/Documents/Dev/git-subrepo/.rc ]] && . ~/Documents/Dev/git-subrepo/.rc
+
 # }}}
 
 # {{{ set variable identifying the chroot you work in (used in the prompt below)
-if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
-    debian_chroot=$(cat /etc/debian_chroot)
-fi
+[[ -z ${debian_chroot:-} && -r /etc/debian_chroot ]] && debian_chroot=$(cat /etc/debian_chroot)
 
 # }}}
 
 # {{{ TERM (should be set by the terminal)
 case "$TERM" in
-    xterm*) TERM=xterm-256color
+    xterm*) TERM=xterm-256color;;
 esac
 
 # }}}
@@ -109,14 +106,14 @@ esac
 # should be on the output of commands, not on the prompt
 force_color_prompt=yes
 
-if [ -n "$force_color_prompt" ]; then
-    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-	# We have color support; assume it's compliant with Ecma-48
-	# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
-	# a case would tend to support setf rather than setaf.)
-	color_prompt=yes
+if [[ -n $force_color_prompt ]]; then
+    if [[ -x /usr/bin/tput ]] && tput setaf 1 >&/dev/null; then
+# We have color support; assume it's compliant with Ecma-48
+# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
+# a case would tend to support setf rather than setaf.)
+        color_prompt=yes
     else
-	color_prompt=
+        color_prompt=
     fi
 fi
 
@@ -138,11 +135,11 @@ export GIT_PS1_SHOWUPSTREAM="verbose,name"
 # Git prompt in color
 export GIT_PS1_SHOWCOLORHINTS=1
 
-if [ "$color_prompt" = yes ]; then
+if [[ $color_prompt = yes ]]; then
     # cf. https://mkaz.com/2014/04/17/the-bash-prompt/
     source ~/configs/extras/colors
     UTFChar1="\342\226\266"
-#    PS1="${debian_chroot:+($debian_chroot)}\[$(tput bold)\]\[$(tput setaf 5)\]\u\[$(tput setaf 4)\]@\[$(tput setaf 5)\]\h\[$(tput setaf 4)\]:\[$(tput setaf 2)\]\w\[$(tput setaf 4)\]\\$ \[$(tput sgr0)\]"
+    # PS1="${debian_chroot:+($debian_chroot)}\[$(tput bold)\]\[$(tput setaf 5)\]\u\[$(tput setaf 4)\]@\[$(tput setaf 5)\]\h\[$(tput setaf 4)\]:\[$(tput setaf 2)\]\w\[$(tput setaf 4)\]\\$ \[$(tput sgr0)\]"
     PROMPT_COMMAND='__git_ps1 "\[$Yellow\]\u\[$Cyan\]@\[$Yellow\]\h\[$Cyan\]:\[$Green\]\w\[$Color_Off\]" "\[$Cyan\] $UTFChar1 \[$Color_Off\]"'
     export PROMPT_COMMAND
 else
@@ -167,39 +164,41 @@ export EDITOR="/usr/bin/vim"
 export VISUAL=$EDITOR
 
 # Programing languages
-if [ -d "/usr/lib/jvm/java-8-oracle" ]; then
+if [[ -d "/usr/lib/jvm/java-8-oracle" ]]; then
     export JAVA_HOME=/usr/lib/jvm/java-8-oracle
 fi
 
-if [ -d "/opt/groovy/bin" ]; then
+if [[ -d "/opt/groovy/bin" ]]; then
     export GROOVY_HOME=/opt/groovy
     export PATH=$PATH:$GROOVY_HOME/bin
 fi
 
-if [ -d "/opt/gradle/bin" ]; then
+if [[ -d "/opt/gradle/bin" ]]; then
     export GRADLE_HOME=/opt/gradle
     export PATH=$PATH:$GRADLE_HOME/bin
 fi
 
-export GOPATH=$HOME/Documents/Dev/golang
+if [[ -d "$HOME/Documents/Dev/golang" ]]; then
+    export GOPATH=$HOME/Documents/Dev/golang
+fi
 
 # hadoop
-if [ -f "/usr/local/hadoop/etc/hadoop/hadoop-env.sh" ]; then
+if [[ -f "/usr/local/hadoop/etc/hadoop/hadoop-env.sh" ]]; then
     source /usr/local/hadoop/etc/hadoop/hadoop-env.sh
     export PATH=$PATH:$HADOOP_PREFIX/bin
 fi
 
-if [ -d "/opt/hadoop/bin" ]; then
+if [[ -d "/opt/hadoop/bin" ]]; then
     export HADOOP_PREFIX=/opt/hadoop
     export PATH=$PATH:$HADOOP_PREFIX/bin
 fi
 
 # spark
-if [ -d "/opt/spark/bin" ]; then
+if [[ -d "/opt/spark/bin" ]]; then
     export PATH=$PATH:/opt/spark/bin
 fi
 
-if [ -d "$HOME/bin" ]; then
+if [[ -d "$HOME/bin" ]]; then
     export PATH=$PATH:~/bin
 fi
 
@@ -210,12 +209,10 @@ export TODOTXT_DEFAULT_ACTION=ls
 
 # {{{ Several other configurations
 # make less more friendly for non-text input files, see lesspipe(1)
-[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+[[ -x /usr/bin/lesspipe ]] && eval "$(SHELL=/bin/sh lesspipe)"
 
 # ssh-pageant
-if [ -f "/usr/local/bin/ssh-pageant" ]; then
-    eval $(/usr/local/bin/ssh-pageant -r -a "/tmp/.ssh-pageant-$USERNAME")
-fi
+[[ -f "/usr/local/bin/ssh-pageant" ]] && eval $(/usr/local/bin/ssh-pageant -r -a "/tmp/.ssh-pageant-$USERNAME")
 
 # }}}
 
