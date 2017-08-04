@@ -1,8 +1,8 @@
 import logging
+import os
 import re
 import subprocess
 import tempfile
-import os
 from datetime import datetime
 from pathlib import Path
 
@@ -14,32 +14,91 @@ def sync(source, destination, to_exclude=None, backup_mode=False):
         source: source directory.
             If source ends with a '/', the content is synced (not the directory itself).
         destination: destination directory. It will be created if it does not exist.
-        to_exclude: list of files to excluse from sync
+        to_exclude: list of files to exclude from sync
+        backup_mode: True to sync, False to backup
     """
-    if to_exclude is None:
-        to_exclude = []
-    backup_string = 'Syncing'
-    if backup_mode:
-        backup_string = 'Backup'
-    logging.info('%s from %s to %s excluding %s', backup_string, source, destination, to_exclude)
-    destination_path = Path(destination)
-    if backup_mode:
-        destination_path /= datetime.today().isoformat()
-        logging.debug('Backup destination: %s', destination_path)
-    destination_path.mkdir(parents=True, exist_ok=True)
-    excluded_files = None
-    try:
-        excluded_files = tempfile.NamedTemporaryFile(mode='w', delete=False)
-        excluded_files.write('\n'.join(to_exclude))
-        excluded_files.close()
-        rsync_command = ['rsync', '-ah', '--stats', '--delete']
-        if backup_mode:
-            previous_backup_path = Path(destination) / 'current'
+    with RsyncRunner(source, destination, to_exclude, backup_mode) as rsync_runner:
+        stats = rsync_runner.invoke_rsync()
+    return stats
+
+
+class RsyncRunner:
+    """A context manager class to run rsync.
+    """
+
+    def __init__(self, source, destination, to_exclude=None, backup_mode=False):
+        """Initialize an rsync object.
+
+        Args:
+            source: source directory.
+                If source ends with a '/', the content is synced (not the directory itself).
+            destination: destination directory. It will be created if it does not exist.
+            to_exclude: list of files to exclude from sync
+            backup_mode: True to sync, False to backup
+        """
+        self.source_path = Path(source)
+        if not self.source_path.exists():
+            raise ValueError("Source path does not exist")
+        self.source_content = (source[-1] == '/')
+        self.orig_destination_path = Path(destination)
+        self.destination_path = self.orig_destination_path
+        self.destination_path.mkdir(parents=True, exist_ok=True)
+        self.to_exclude = [] if to_exclude is None else to_exclude
+        self.excluded_files = None
+        self.backup_mode = backup_mode
+        self.rsync_command = ['rsync', '-ah', '--stats', '--delete']
+        logging.info('%s %s %s to %s excluding %s',
+                     'Backup' if backup_mode else 'Syncing',
+                     'content of' if self.source_content else 'directory',
+                     self.source_path,
+                     self.destination_path,
+                     self.to_exclude)
+
+    def __enter__(self):
+        self.process_excluded_files()
+        self.process_backup_mode()
+        self.process_source_and_destination()
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if not self.to_exclude == []:
+            os.remove(self.excluded_files)
+        if self.backup_mode:
+            previous_backup_path = self.orig_destination_path / 'current'
+            if previous_backup_path.exists():
+                os.remove(self.orig_destination_path / 'current')
+            os.symlink(self.destination_path, self.orig_destination_path / 'current')
+
+    def process_excluded_files(self):
+        """Define rsync arguments to exclude files."""
+        if not self.to_exclude == []:
+            with tempfile.NamedTemporaryFile(mode='w', delete=False) as excluded_files:
+                excluded_files.write('\n'.join(self.to_exclude))
+                self.rsync_command += ['--delete-excluded', '--exclude-from=' + excluded_files.name]
+                self.excluded_files = excluded_files.name
+                logging.debug('Writing excluded filenames in %s', excluded_files.name)
+
+    def process_backup_mode(self):
+        """Define rsync argument for backup"""
+        if self.backup_mode:
+            previous_backup_path = self.destination_path / 'current'
+            self.destination_path /= datetime.today().isoformat()
+            logging.debug('Destination directory for backup: %s', self.destination_path)
             if previous_backup_path.is_dir():
-                rsync_command.append('--link-dest=' + str(previous_backup_path))
-        rsync_command += ['--delete-excluded', '--exclude-from=' + excluded_files.name,
-                         source, destination_path]
-        completed_process = subprocess.run(rsync_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                self.rsync_command.append('--link-dest=' + str(previous_backup_path))
+
+    def process_source_and_destination(self):
+        """Define rsync options for source and destination directories."""
+        self.rsync_command += [str(self.source_path) + '/' if self.source_content else '',
+                               str(self.destination_path)]
+        logging.debug('Source directory: %s', str(self.source_path) + '/' if self.source_content else '')
+        logging.debug('Destination directory: %s', str(self.destination_path))
+
+    def invoke_rsync(self):
+        """Invoke rsync and parse stats."""
+        completed_process = subprocess.run(self.rsync_command,
+                                           stdout=subprocess.PIPE,
+                                           stderr=subprocess.PIPE)
         logging.debug(completed_process)
         stats = None
         if completed_process.returncode:
@@ -47,16 +106,7 @@ def sync(source, destination, to_exclude=None, backup_mode=False):
         else:
             stats = parse_rsync_stats(str(completed_process.stdout, 'utf-8'))
             logging.info(stats)
-    finally:
-        if excluded_files:
-            os.remove(excluded_files.name)
-        if backup_mode:
-            previous_backup_path = Path(destination) / 'current'
-            if previous_backup_path.exists():
-                os.remove(Path(destination) / 'current')
-            os.symlink(destination_path, Path(destination) / 'current')
-    logging.debug('%s ended', backup_string)
-    return stats
+        return stats
 
 
 def parse_rsync_stats(rsync_stdout):
@@ -113,7 +163,7 @@ def nof2int(nof):
     """Convert a "number of files" to an int.
 
     Args:
-        nof a number of files as displayed by rsync
+        nof: a number of files as displayed by rsync
     """
     return int(nof.replace(',', ''))
 
@@ -122,7 +172,7 @@ def tfs2int(tfs):
     """Convert a "total file size" to an int.
 
     Args:
-        tfs a total file size as displayed by rsync
+        tfs: a total file size as displayed by rsync
     """
     scales = {'K': 1024, 'M': 1024 * 1024, 'G': 1024 * 1024 * 1024}
     multiplier = 1
