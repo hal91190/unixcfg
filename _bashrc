@@ -198,6 +198,11 @@ if [[ -d "/opt/spark/bin" ]]; then
     export PATH=$PATH:/opt/spark/bin
 fi
 
+# Arduino
+if [[ -d "/usr/share/arduino" ]]; then
+    export ARDMK_DIR=/usr/share/arduino
+fi
+
 if [[ -d "$HOME/bin" ]]; then
     export PATH=$PATH:~/bin
 fi
