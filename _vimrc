@@ -206,7 +206,7 @@ if has('gui_running')
   "set guioptions-=r          "ascenseur de droite
   "set guioptions-=L          "ascenseur de gauche
   if LINUX()
-    set guifont=Source\ Code\ Pro\ Medium\ 12,Droid\ Sans\ Mono\ 12,Courier\ New\ Regular\ 13
+    set guifont=Source\ Code\ Pro\ Medium\ 14,Droid\ Sans\ Mono\ 14,Courier\ New\ Regular\ 14
   elseif OSX()
     set guifont=Droid\ Sans\ Mono:h12,Courier\ New\ Regular:h13
   elseif WINDOWS()
