@@ -19,6 +19,7 @@
 	oops = commit --amend --no-edit
 	st = status -s
 	up = rebase
+	sl = shortlog -sne
 [log]
 	abbrevCommit = true
 [push]
