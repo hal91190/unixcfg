@@ -3,9 +3,12 @@ if [ -x /usr/bin/dircolors ]; then
 fi
 
 # ls
-alias ls='ls -hF --color=auto'
-alias l='ls -l'
-alias ll='ls -lA'
+#alias ls='ls -hF --color=auto'
+alias ls='eza -F --color=auto'
+#alias l='ls -l'
+alias l='eza -lF --color=auto --icons=auto --git'
+#alias ll='ls -lA'
+alias ll='eza -alF --color=auto --icons=auto --git'
 alias dir='dir --color=auto'
 alias vdir='vdir --color=auto'
 
@@ -17,7 +20,3 @@ alias du='du -h'
 alias grep='grep --color=auto'
 alias egrep='egrep --color=auto'
 alias fgrep='fgrep --color=auto'
-
-# todo-txt
-alias t=todo-txt
-
