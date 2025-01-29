@@ -1,3 +1,5 @@
+# shellcheck disable=SC2148
+
 # If not running interactively, don't do anything
 [[ "$-" != *i* ]] && return
 
@@ -161,12 +163,14 @@ esac
 # {{{ ENV
 # General settings
 export EDITOR="/usr/bin/vim"
-export VISUAL=$EDITOR
+export VISUAL="code --wait --new-window"
 
 # Programing languages
-if [[ -d "/usr/lib/jvm/java-8-oracle" ]]; then
-    export JAVA_HOME=/usr/lib/jvm/java-8-oracle
-fi
+# Most recent Java version
+for java_dir in /usr/lib/jvm/{java-8-openjdk-amd64/,java-11-openjdk-amd64/,java-17-openjdk-amd64/,java-21-openjdk-amd64/,java-22-openjdk-amd64/}; do
+    export JAVA_HOME="$java_dir"
+done;
+unset java_dir;
 
 if [[ -d "/opt/groovy/bin" ]]; then
     export GROOVY_HOME=/opt/groovy
@@ -181,6 +185,8 @@ fi
 if [[ -d "$HOME/Documents/Dev/golang" ]]; then
     export GOPATH=$HOME/Documents/Dev/golang
 fi
+
+[[ -f "$HOME/.cargo/env" ]] && . "$HOME/.cargo/env"
 
 # hadoop
 if [[ -f "/usr/local/hadoop/etc/hadoop/hadoop-env.sh" ]]; then
@@ -217,8 +223,6 @@ export TODOTXT_DEFAULT_ACTION=ls
 [[ -x /usr/bin/lesspipe ]] && eval "$(SHELL=/bin/sh lesspipe)"
 
 # ssh-pageant
-[[ -f "/usr/local/bin/ssh-pageant" ]] && eval $(/usr/local/bin/ssh-pageant -r -a "/tmp/.ssh-pageant-$USERNAME")
+[[ -f "/usr/local/bin/ssh-pageant" ]] && eval "$(/usr/local/bin/ssh-pageant -r -a '/tmp/.ssh-pageant-$USERNAME')"
 
 # }}}
-
-. "$HOME/.cargo/env"

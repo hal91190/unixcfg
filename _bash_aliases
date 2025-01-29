@@ -1,14 +1,22 @@
+# shellcheck disable=SC2148
+
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
 fi
 
+CARGO_BIN="$HOME/.cargo/bin"
+
 # ls
-#alias ls='ls -hF --color=auto'
-alias ls='eza -F --color=auto'
-#alias l='ls -l'
-alias l='eza -lF --color=auto --icons=auto --git'
-#alias ll='ls -lA'
-alias ll='eza -alF --color=auto --icons=auto --git'
+if [[ -x "$CARGO_BIN/eza" ]]; then
+    alias ls='eza -F --color=auto'
+    alias l='eza -lF --color=auto --icons=auto --git'
+    alias ll='eza -alF --color=auto --icons=auto --git'
+else
+    alias ls='ls -hF --color=auto'
+    alias l='ls -l'
+    alias ll='ls -lA'
+fi
+
 alias dir='dir --color=auto'
 alias vdir='vdir --color=auto'
 
@@ -22,4 +30,8 @@ alias egrep='egrep --color=auto'
 alias fgrep='fgrep --color=auto'
 
 # Autres
-alias cat='bat --theme="Solarized (dark)"'
+if [[ -x "$CARGO_BIN/bat" ]]; then
+    alias cat='bat --theme="Solarized (dark)"'
+fi
+
+[[ -d "$HOME/.local/share/gh/extensions/gh-copilot/" ]] && eval "$(gh copilot alias -- bash)"

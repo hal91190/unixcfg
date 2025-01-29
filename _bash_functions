@@ -1,3 +1,5 @@
+# shellcheck disable=SC2148
+
 #### Functions
 # Convertit une vidéo au format Kidigo (VTech)
 # Vidéo : AVI en format MPEG4 SP (XVID), résolution : 480 x 272
