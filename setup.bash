@@ -104,6 +104,9 @@ sudo wget -q -N -P "/etc/bash_completion.d" "$NOTES_SH_URL/notes-completion"
 echo "Installing Python scripts"
 create_link "scripts/backup_sample.py" "$BIN/backup_sample.py"
 
+# eza config
+create_link "$CFG_DIR/eza" "$XDG_CONFIG_HOME/eza"
+
 echo "Finish installation by running :"
 echo "source \"$HOME/.bashrc\""
 
