@@ -58,20 +58,20 @@ shopt -s checkwinsize
 # {{{ History Options
 #
 # don't put duplicate lines or lines starting with space in the history.
-export HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignoreboth
+export HISTCONTROL=ignoreboth
 
 # Ignore some controlling instructions
 # HISTIGNORE is a colon-delimited list of patterns which should be excluded.
 # The '&' is a special pattern which suppresses duplicate entries.
 # export HISTIGNORE=$'[ \t]*:&:[fb]g:exit'
-# export HISTIGNORE=$'[ \t]*:&:[fb]g:exit:ls' # Ignore the ls command as well
-#
+export HISTIGNORE="clear:history:[bf]g:exit:date:* --help:ls"
+
 # Whenever displaying the prompt, write the previous line to disk
 # export PROMPT_COMMAND="history -a"
 
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTSIZE=1000
-HISTFILESIZE=2000
+HISTSIZE=2000
+HISTFILESIZE=5000
 
 # }}}
 
@@ -224,5 +224,8 @@ export TODOTXT_DEFAULT_ACTION=ls
 
 # ssh-pageant
 [[ -f "/usr/local/bin/ssh-pageant" ]] && eval "$(/usr/local/bin/ssh-pageant -r -a '/tmp/.ssh-pageant-$USERNAME')"
+
+# fzf (https://junegunn.github.io/fzf/)
+[[ -x /usr/bin/fzf ]] && eval "$(fzf --bash)"
 
 # }}}
