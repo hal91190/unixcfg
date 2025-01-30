@@ -142,8 +142,7 @@ if [[ $color_prompt = yes ]]; then
     source ~/configs/extras/colors
     UTFChar1="\342\226\266"
     # PS1="${debian_chroot:+($debian_chroot)}\[$(tput bold)\]\[$(tput setaf 5)\]\u\[$(tput setaf 4)\]@\[$(tput setaf 5)\]\h\[$(tput setaf 4)\]:\[$(tput setaf 2)\]\w\[$(tput setaf 4)\]\\$ \[$(tput sgr0)\]"
-    PROMPT_COMMAND='__git_ps1 "\[$Yellow\]\u\[$Cyan\]@\[$Yellow\]\h\[$Cyan\]:\[$Green\]\w\[$Color_Off\]" "\[$Cyan\] $UTFChar1 \[$Color_Off\]"'
-    export PROMPT_COMMAND
+    export PROMPT_COMMAND='__git_ps1 "\[$Yellow\]\u\[$Cyan\]@\[$Yellow\]\h\[$Cyan\]:\[$Green\]\w\[$Color_Off\]" "\[$Cyan\] $UTFChar1 \[$Color_Off\]"'
 else
     PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 fi
@@ -227,5 +226,12 @@ export TODOTXT_DEFAULT_ACTION=ls
 
 # fzf (https://junegunn.github.io/fzf/)
 [[ -x /usr/bin/fzf ]] && eval "$(fzf --bash)"
+
+# fd (https://github.com/sharkdp/fd)
+if [[ -x /usr/bin/fdfind && -x /usr/bin/fzf ]]; then
+    export FZF_DEFAULT_COMMAND="fdfind --type file --strip-cwd-prefix --color=always"
+    export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+    export FZF_DEFAULT_OPTS="--ansi"
+fi
 
 # }}}
