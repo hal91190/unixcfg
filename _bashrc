@@ -167,7 +167,9 @@ export VISUAL="code --wait --new-window"
 # Programing languages
 # Most recent Java version
 for java_dir in /usr/lib/jvm/{java-8-openjdk-amd64/,java-11-openjdk-amd64/,java-17-openjdk-amd64/,java-21-openjdk-amd64/,java-22-openjdk-amd64/}; do
-    export JAVA_HOME="$java_dir"
+    if [[ -d "$java_dir" ]]; then
+        export JAVA_HOME="$java_dir"
+    fi
 done;
 unset java_dir;
 
