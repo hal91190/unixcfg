@@ -6,7 +6,7 @@
 	email = stephane.lopes@uvsq.fr
 [core]
 	pager = less
-	editor = gvim --nofork -f
+	editor = vim
 	whitespace = -trailing-space
 	autocrlf = input
 [color]
