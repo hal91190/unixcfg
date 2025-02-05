@@ -236,4 +236,7 @@ if [[ -x /usr/bin/fdfind && -x /usr/bin/fzf ]]; then
     export FZF_DEFAULT_OPTS="--ansi"
 fi
 
+# zoxyde (https://github.com/ajeetdsouza/zoxide)
+[[ -x $HOME/.cargo/bin/zoxide ]] && eval "$(zoxide init bash)"
+
 # }}}
