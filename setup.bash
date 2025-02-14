@@ -88,7 +88,7 @@ vim +PluginInstall +qall
 # notes.sh
 echo "Installing note taking script"
 NOTES_SH_URL="https://gist.github.com/hal91190/20d361c317b71232d8edb7496f2bbe14/raw"
-BIN="$HOME/bin"
+BIN="$HOME/.local/bin"
 if [[ ! -d "$BIN" ]]; then
     mkdir -p "$BIN"
 fi
