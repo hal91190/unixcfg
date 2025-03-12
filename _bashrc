@@ -167,8 +167,8 @@ export VISUAL="code --wait --new-window"
 # Programming languages
 # Most recent Java version
 for java_ver in 8 11 17 21 22; do
-    if [[ -d "/usr/lib/jvm/java-${java_dir}-openjdk-amd64/" ]]; then
-        export JAVA_HOME="/usr/lib/jvm/java-${java_dir}-openjdk-amd64/"
+    if [[ -d "/usr/lib/jvm/java-${java_ver}-openjdk-amd64/" ]]; then
+        export JAVA_HOME="/usr/lib/jvm/java-${java_ver}-openjdk-amd64/"
     fi
 done;
 unset java_ver;
